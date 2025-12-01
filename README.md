@@ -1,3 +1,57 @@
+# Game Library
+
+A web application for browsing and searching games with detailed information.
+
+## Installation
+
+You need Node.js version 18 or higher.
+
+Clone the repository:
+```bash
+git clone https://github.com/Thanthanakorn/midas-frontend-coding-assessment.git
+cd midas-frontend-coding-assessment
+```
+
+Install dependencies:
+```bash
+npm install
+```
+
+Start the development server:
+```bash
+npm run dev
+```
+
+Open http://localhost:5173 in your browser.
+
+## Build for Production
+
+```bash
+npm run build
+```
+
+## Project Structure
+
+```
+src/
+├── api/              API client and endpoints
+├── components/       Reusable components
+├── hooks/           Custom hooks
+├── pages/           Page components
+├── types/           TypeScript types
+└── App.tsx          Main component
+```
+
+## Features
+
+- Browse games with pagination
+- Search games by name
+- View game details
+- Adjust items per page
+- Responsive design
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

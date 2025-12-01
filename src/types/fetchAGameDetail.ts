@@ -1,4 +1,4 @@
-export interface FetchAGameDetail {
+export interface GameDetailData {
   id: number;
   title: string;
   category: string;
@@ -8,4 +8,8 @@ export interface FetchAGameDetail {
   releaseDate?: string;
   thumbnail: string;
   screenshots?: string[];
+}
+
+export interface FetchAGameDetail {
+  data: GameDetailData[];
 }

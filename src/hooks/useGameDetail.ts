@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { gameApi } from '../api/gameApi';
-import type { FetchAGameDetail } from '../types/fetchAGameDetail';
+import type { GameDetailData } from '../types/fetchAGameDetail';
 
 export function useGameDetail(gameId: number | null) {
-  const [game, setGame] = useState<FetchAGameDetail | null>(null);
+  const [game, setGame] = useState<GameDetailData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,10 +19,10 @@ export function useGameDetail(gameId: number | null) {
       try {
         setLoading(true);
         setError(null);
-        const data = await gameApi.fetchGameDetail(gameId!);
+        const response = await gameApi.fetchGameDetail(gameId!);
         
         if (mounted) {
-          setGame(data);
+          setGame(response.data && response.data.length > 0 ? response.data[0] : null);
         }
       } catch (err) {
         if (mounted) {
