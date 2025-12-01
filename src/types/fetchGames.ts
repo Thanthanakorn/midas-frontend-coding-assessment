@@ -4,7 +4,7 @@ export interface FetchGames {
     totalPage: number;
 }
 
-interface GameDetail {
+export interface GameDetail {
     id: number;
     title: string;
     category: string;

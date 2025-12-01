@@ -6,6 +6,8 @@ export function useGames() {
   const [games, setGames] = useState<FetchAGameDetail[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     let mounted = true;
@@ -18,6 +20,8 @@ export function useGames() {
         
         if (mounted) {
           setGames(data.result);
+          setTotalItems(data.length);
+          setTotalPages(data.totalPage);
         }
       } catch (err) {
         if (mounted) {
@@ -37,5 +41,5 @@ export function useGames() {
     };
   }, []);
 
-  return { games, loading, error };
+  return { games, loading, error, totalItems, totalPages };
 }
