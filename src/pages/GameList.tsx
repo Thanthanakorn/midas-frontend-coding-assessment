@@ -1,13 +1,21 @@
 import { useGames } from "../hooks/useGames";
 import { useSearchGames } from "../hooks/useSearchGames";
-import { GameCard } from "../components/GameCard/GameCard";
+import { GameCard } from "../components/GameCard";
 import { SearchBar } from "../components/SearchBar";
 import { LoadingSkeleton, Loader } from "../components/Loader";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { useState } from "react";
 
-export function GameList() {
-  const { games, loading, error, totalItems, totalPages } = useGames();
+interface GameListProps {
+  onGameClick: (gameId: number) => void;
+}
+
+export function GameList({ onGameClick }: GameListProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowPerPage, setRowPerPage] = useState(10);
+  const [inputValue, setInputValue] = useState("10");
+  
+  const { games, loading, error, totalItems, totalPages } = useGames(currentPage, rowPerPage);
   const {
     query,
     results,
@@ -15,27 +23,43 @@ export function GameList() {
     error: searchError,
     search,
     clearSearch,
-  } = useSearchGames();
+  } = useSearchGames(currentPage, rowPerPage);
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const displayGames = query ? results : games;
+  const displayGames = query ? results?.result : games;
   const isLoading = query ? searchLoading : loading;
   const displayError = query ? searchError : error;
   const hasGames = displayGames && displayGames.length > 0;
+  const displayTotalItems = query ? results?.length : totalItems;
+  const displayTotalPages = query ? results?.totalPage : totalPages;
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputBlur = () => {
+    const value = parseInt(inputValue);
+    if (!isNaN(value) && value > 0 && value <= 100) {
+      setRowPerPage(value);
+      setCurrentPage(1); // Reset to first page when changing rows per page
+    } else {
+      // Reset to current rowPerPage if invalid
+      setInputValue(rowPerPage.toString());
+    }
+  };
+
   const renderPagination = () => {
-    if (query || totalPages <= 1) return null;
+    const pagesToShow = displayTotalPages || 0;
+    if (pagesToShow <= 1) return null;
 
     const pages = [];
     const maxVisiblePages = 5;
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    const endPage = Math.min(pagesToShow, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage < maxVisiblePages - 1) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -81,23 +105,23 @@ export function GameList() {
           </button>
         ))}
 
-        {endPage < totalPages && (
+        {endPage < pagesToShow && (
           <>
-            {endPage < totalPages - 1 && (
+            {endPage < pagesToShow - 1 && (
               <span className="px-2 text-gray-500">...</span>
             )}
             <button
-              onClick={() => handlePageChange(totalPages)}
+              onClick={() => handlePageChange(pagesToShow)}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
             >
-              {totalPages}
+              {pagesToShow}
             </button>
           </>
         )}
 
         <button
           onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
+          disabled={currentPage === pagesToShow}
           className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           Next
@@ -145,10 +169,10 @@ export function GameList() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {displayGames.map((game) => (
-                <GameCard key={game.id} game={game} onClick={() => {}} />
+                <GameCard key={game.id} game={game} onClick={() => onGameClick(game.id)} />
               ))}
             </div>
-            {!query && !loading && totalItems > 0 && (
+            {!loading && !searchLoading && displayTotalItems && displayTotalItems > 0 && (
               <div className="mt-8 first-line:mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-4 text-sm text-gray-600">
                   <span className="flex items-center gap-2">
@@ -165,11 +189,20 @@ export function GameList() {
                         d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
                       />
                     </svg>
-                    <strong>{totalItems}</strong> total games
+                    <strong>{displayTotalItems}</strong> total {query ? 'results' : 'games'}
                   </span>
-                  <span>
-                    Showing <strong>{games.length}</strong> games on current
-                    page
+                  <span className="flex items-center gap-2">
+                    Showing
+                    <input
+                      type="number"
+                      min="1"
+                      max="100"
+                      value={inputValue}
+                      onChange={handleInputChange}
+                      onBlur={handleInputBlur}
+                      className="w-16 px-2 py-1 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-semibold"
+                    />
+                    {query ? 'results' : 'games'} per page
                   </span>
                 </div>
               </div>

@@ -2,7 +2,7 @@ export interface FetchAGameDetail {
   id: number;
   title: string;
   category: string;
-  rating: number;
+  rating?: number;
   description?: string;
   features?: string[];
   releaseDate?: string;

@@ -19,7 +19,7 @@ export function useGameDetail(gameId: number | null) {
       try {
         setLoading(true);
         setError(null);
-        const data = await gameApi.fetchGameDetail(gameId!.toString());
+        const data = await gameApi.fetchGameDetail(gameId!);
         
         if (mounted) {
           setGame(data);

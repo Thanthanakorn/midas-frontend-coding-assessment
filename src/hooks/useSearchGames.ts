@@ -1,17 +1,17 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { gameApi } from '../api/gameApi';
-import type { FetchAGameDetail } from '../types/fetchAGameDetail';
+import type { FetchGames } from '../types/fetchGames';
 
-export function useSearchGames(debounceMs = 300) {
+export function useSearchGames(page: number = 1, rowPerPage: number = 10, debounceMs = 300) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<FetchAGameDetail[]>([]);
+  const [results, setResults] = useState<FetchGames>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!query.trim()) {
-      setResults([]);
+      setResults(undefined);
       setError(null);
       return;
     }
@@ -24,11 +24,11 @@ export function useSearchGames(debounceMs = 300) {
       try {
         setLoading(true);
         setError(null);
-        const data = await gameApi.searchGames(query);
-        setResults(data.result);
+        const data = await gameApi.searchGames(query, page, rowPerPage);
+        setResults(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Search failed');
-        setResults([]);
+        setResults(undefined);
       } finally {
         setLoading(false);
       }
@@ -39,7 +39,7 @@ export function useSearchGames(debounceMs = 300) {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [query, debounceMs]);
+  }, [query, page, rowPerPage, debounceMs]);
 
   const search = useCallback((searchQuery: string) => {
     setQuery(searchQuery);
@@ -47,7 +47,7 @@ export function useSearchGames(debounceMs = 300) {
 
   const clearSearch = useCallback(() => {
     setQuery('');
-    setResults([]);
+    setResults(undefined);
     setError(null);
   }, []);
 

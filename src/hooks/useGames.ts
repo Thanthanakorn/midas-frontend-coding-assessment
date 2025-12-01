@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { gameApi } from '../api/gameApi';
-import type { FetchAGameDetail } from '../types/fetchAGameDetail';
+import type { FetchGames } from '../types/fetchGames';
 
-export function useGames() {
-  const [games, setGames] = useState<FetchAGameDetail[]>([]);
+export function useGames(page: number = 1, rowPerPage: number = 10) {
+  const [games, setGames] = useState<FetchGames['result']>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalItems, setTotalItems] = useState(0);
@@ -16,7 +16,7 @@ export function useGames() {
       try {
         setLoading(true);
         setError(null);
-        const data = await gameApi.fetchGames();
+        const data = await gameApi.fetchGames(page, rowPerPage);
         
         if (mounted) {
           setGames(data.result);
@@ -39,7 +39,7 @@ export function useGames() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [page, rowPerPage]);
 
   return { games, loading, error, totalItems, totalPages };
 }
