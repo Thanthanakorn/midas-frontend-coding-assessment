@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useGameDetail } from "../hooks/useGameDetail";
-import { Loader } from "../components/Loader";
-import { ErrorMessage } from "../components/ErrorMessage";
+import { Loader } from "../components/loader";
+import { ErrorMessage } from "../components/errorMessage";
 
 interface GamePageProps {
   gameId: number;
@@ -47,7 +47,6 @@ export function GamePage({ gameId, onBack }: GamePageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <button
@@ -62,19 +61,14 @@ export function GamePage({ gameId, onBack }: GamePageProps) {
         </div>
       </div>
 
-      {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Title */}
           <div className="px-8 pt-8 pb-4 border-b border-gray-200">
             <h1 className="text-4xl font-bold text-gray-900">{game.title}</h1>
           </div>
 
-          {/* Main Content */}
           <div className="flex flex-col lg:flex-row gap-8 p-8">
-            {/* Left Side - Screenshots Slider (65%) */}
             <div className="lg:w-[65%]">
-              {/* Main Image */}
               <div className="relative aspect-video bg-gray-200 rounded-lg overflow-hidden mb-4">
                 <img
                   src={allImages[selectedImage]}
@@ -87,7 +81,6 @@ export function GamePage({ gameId, onBack }: GamePageProps) {
                 />
               </div>
 
-              {/* Thumbnail Slider */}
               {allImages.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto pb-2">
                   {allImages.map((image, index) => (
@@ -115,9 +108,7 @@ export function GamePage({ gameId, onBack }: GamePageProps) {
               )}
             </div>
 
-            {/* Right Side - Game Details (35%) */}
             <div className="lg:w-[35%] flex flex-col gap-6">
-              {/* Thumbnail */}
               <div className="relative aspect-square bg-gray-200 rounded-lg overflow-hidden">
                 <img
                   src={game.thumbnail}
@@ -130,7 +121,6 @@ export function GamePage({ gameId, onBack }: GamePageProps) {
                 />
               </div>
 
-              {/* Category */}
               <div>
                 <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Category</h3>
                 <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
@@ -138,7 +128,6 @@ export function GamePage({ gameId, onBack }: GamePageProps) {
                 </span>
               </div>
 
-              {/* Rating */}
               <div>
                 <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Rating</h3>
                 <div className="flex items-center gap-2">
@@ -154,7 +143,6 @@ export function GamePage({ gameId, onBack }: GamePageProps) {
                 </div>
               </div>
 
-              {/* Release Date */}
               {game.releaseDate && (
                 <div>
                   <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Release Date</h3>
@@ -162,7 +150,6 @@ export function GamePage({ gameId, onBack }: GamePageProps) {
                 </div>
               )}
 
-              {/* Description */}
               {game.description && (
                 <div>
                   <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Description</h3>
@@ -170,7 +157,6 @@ export function GamePage({ gameId, onBack }: GamePageProps) {
                 </div>
               )}
 
-              {/* Features */}
               {game.features && game.features.length > 0 && (
                 <div>
                   <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Features</h3>

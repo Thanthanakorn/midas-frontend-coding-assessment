@@ -1,20 +1,40 @@
-import { useState } from 'react';
-import { GameList } from './pages/GameList';
-import { GamePage } from './pages/GamePage';
+import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom';
+import { GameList } from './pages/gameList';
+import { GamePage } from './pages/gamePage';
 
-function App() {
-  const [selectedGameId, setSelectedGameId] = useState<number | null>(null);
+function GameListPage() {
+  const navigate = useNavigate();
+  
+  const handleGameClick = (gameId: number) => {
+    navigate(`/${gameId}`);
+  };
 
-  if (selectedGameId !== null) {
-    return (
-      <GamePage 
-        gameId={selectedGameId} 
-        onBack={() => setSelectedGameId(null)} 
-      />
-    );
+  return <GameList onGameClick={handleGameClick} />;
+}
+
+function GameDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  
+  const gameId = id ? parseInt(id) : null;
+
+  if (!gameId) {
+    navigate('/');
+    return null;
   }
 
-  return <GameList onGameClick={setSelectedGameId} />;
+  return <GamePage gameId={gameId} onBack={() => navigate('/')} />;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<GameListPage />} />
+        <Route path="/:id" element={<GameDetailPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

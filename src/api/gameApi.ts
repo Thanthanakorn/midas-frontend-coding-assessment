@@ -1,5 +1,5 @@
 import { httpClient } from './httpClient';
-import type { FetchAGameDetail} from '../types/fetchAGameDetail';
+import type { FetchGameDetail } from '../types/gameDetail';
 import type { FetchGames } from '../types/fetchGames';
 
 export const gameApi = {
@@ -10,8 +10,8 @@ export const gameApi = {
     });
   },
 
-  async fetchGameDetail(id: number): Promise<FetchAGameDetail> {
-    return httpClient.get<FetchAGameDetail>(`/api/games/${id}`);
+  async fetchGameDetail(id: number): Promise<FetchGameDetail> {
+    return httpClient.get<FetchGameDetail>(`/api/games/${id}`);
   },
 
   async searchGames(query: string, page: number = 1, rowPerPage: number = 10): Promise<FetchGames> {

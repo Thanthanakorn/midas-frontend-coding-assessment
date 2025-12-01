@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { gameApi } from '../api/gameApi';
-import type { GameDetailData } from '../types/fetchAGameDetail';
+import type { GameDetailData } from '../types/gameDetail';
 
 export function useGameDetail(gameId: number | null) {
   const [game, setGame] = useState<GameDetailData | null>(null);

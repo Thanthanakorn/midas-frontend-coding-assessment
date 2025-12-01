@@ -1,4 +1,4 @@
-import type { GameCardProps } from '../types/GameCardProps';
+import type { GameCardProps } from '../types/gameCard';
 
 export function GameCard({ game, onClick }: GameCardProps) {
   return (

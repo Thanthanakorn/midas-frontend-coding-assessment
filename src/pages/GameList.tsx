@@ -1,9 +1,9 @@
 import { useGames } from "../hooks/useGames";
 import { useSearchGames } from "../hooks/useSearchGames";
-import { GameCard } from "../components/GameCard";
-import { SearchBar } from "../components/SearchBar";
-import { LoadingSkeleton, Loader } from "../components/Loader";
-import { ErrorMessage } from "../components/ErrorMessage";
+import { GameCard } from "../components/gameCard";
+import { SearchBar } from "../components/searchBar";
+import { LoadingSkeleton, Loader } from "../components/loader";
+import { ErrorMessage } from "../components/errorMessage";
 import { useState } from "react";
 
 interface GameListProps {
